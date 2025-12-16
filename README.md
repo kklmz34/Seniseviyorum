@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -53,7 +52,7 @@ body.blurred::before{
   max-width:90%;
   max-height:85vh;
   text-align:center;
-  overflow:auto; /* 🔴 ZOOM FIX */
+  overflow:auto;
 }
 .close{
   margin-top:12px;
@@ -63,14 +62,13 @@ body.blurred::before{
   cursor:pointer;
 }
 
-/* MODAL IMAGE */
 #modalImg{
   max-width:100%;
   border-radius:14px;
   margin-bottom:12px;
   touch-action:none;
   transition:transform .2s ease;
-  transform-origin:center center; /* 🔴 ZOOM FIX */
+  transform-origin:center center;
 }
 
 /* Kalpler */
@@ -118,7 +116,6 @@ Her güzel şeyin bir fazlası sensin,
 Ama her güzel şeyde senin eserin.
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
   <div class="modal-content">
     <img id="modalImg">
@@ -144,8 +141,52 @@ for(let i=0;i<20;i++){
   document.body.appendChild(h);
 }
 
-/* Mesajlar */
-const messages=[...Array(50)].map((_,i)=>`Seni çok seviyorum 💜 ${i+1}`);
+/* 50 ÖZEL MESAJ */
+const messages = [
+  "Yüzüne baktığımda içim sakinleşiyor 💜",
+  "Gülüşün dünyadaki en güzel manzara 😊",
+  "Bakışların kalbime dokunuyor ✨",
+  "Gözlerinle insanın içini ısıtıyorsun 🌸",
+  "Saçlarının her hali ayrı güzel 💫",
+  "Yüzündeki o ifade her şeyi unutturuyor 🤍",
+  "Gülüşün karanlık günleri aydınlatıyor ☀️",
+  "Bakışlarında huzur var 🌿",
+  "Gözlerine baktığımda dünya susuyor 🌌",
+  "Saçlarının rüzgârda savruluşu çok güzel 🍃",
+
+  "Yüzün mutluluğun tanımı gibi 💖",
+  "Gülüşün kalbimi yumuşatıyor 💕",
+  "Bakışların insana kendini özel hissettiriyor ✨",
+  "Gözlerin gecenin yıldızları gibi 🌙",
+  "Saçların yüzüne ayrı bir zarafet katıyor 🌸",
+  "Yüzüne her baktığımda gülümsüyorum 😊",
+  "Gülüşün içimi ısıtıyor 🔥",
+  "Bakışlarında sevgi var 💌",
+  "Gözlerin insanı kendine çekiyor 💫",
+  "Saçlarının dokusu bile huzur veriyor 🌿",
+
+  "Yüzün aklımdan çıkmıyor 🤍",
+  "Gülüşün en sevdiğim detay 💜",
+  "Bakışların kalbimi durduruyor ✨",
+  "Gözlerinle başka bir dünya var 🌌",
+  "Saçların seni daha da özel yapıyor 💎",
+  "Yüzün rüya gibi 🌙",
+  "Gülüşün hayatı güzelleştiriyor 🌈",
+  "Bakışların içimi sakinleştiriyor 🕊️",
+  "Gözlerinle her şey daha anlamlı 💖",
+  "Saçlarının her teli ayrı güzel ✨",
+
+  "Yüzün bana huzuru hatırlatıyor 🌿",
+  "Gülüşün kalbimin ritmi 💓",
+  "Bakışların ruhuma iyi geliyor 🤍",
+  "Gözlerinle zaman yavaşlıyor ⏳",
+  "Saçların çok zarif duruyor 🌸",
+  "Yüzündeki masumluk çok güzel 😊",
+  "Gülüşünle her şey yoluna giriyor ☀️",
+  "Bakışların sevildiğimi hissettiriyor 💌",
+  "Gözlerin kalbimin en sevdiği yer 💜",
+  "Yüzün, gülüşün ve bakışların… hepsi çok özel 💖"
+];
 
 /* Fotoğraflar */
 for(let i=1;i<=50;i++){
@@ -176,74 +217,29 @@ for(let i=1;i<=50;i++){
   move();
 }
 
-/* MODAL */
 function openModal(text,src){
   scale=1;
-  const img=document.getElementById('modalImg');
-  img.src=src;
-  img.style.transform='scale(1)';
-  document.getElementById('modalText').innerText=text;
-  document.getElementById('modal').style.display='flex';
+  modalImg.src=src;
+  modalImg.style.transform='scale(1)';
+  modalText.innerText=text;
+  modal.style.display='flex';
   document.body.classList.add('blurred');
 }
 function closeModal(){
-  document.getElementById('modal').style.display='none';
+  modal.style.display='none';
   document.body.classList.remove('blurred');
 }
 
-/* ZOOM – MOUSE */
-const modalImg=document.getElementById('modalImg');
+/* ZOOM */
 modalImg.addEventListener('wheel',e=>{
   e.preventDefault();
   scale+=e.deltaY*-0.0015;
   scale=Math.min(3,Math.max(1,scale));
   modalImg.style.transform=`scale(${scale})`;
 });
-
-/* PINCH ZOOM */
-modalImg.addEventListener('touchstart',e=>{
-  if(e.touches.length===2){
-    startDist=Math.hypot(
-      e.touches[0].clientX-e.touches[1].clientX,
-      e.touches[0].clientY-e.touches[1].clientY
-    );
-    startScale=scale;
-  }
-  startX=e.touches[0].clientX;
-});
-modalImg.addEventListener('touchmove',e=>{
-  if(e.touches.length===2){
-    const d=Math.hypot(
-      e.touches[0].clientX-e.touches[1].clientX,
-      e.touches[0].clientY-e.touches[1].clientY
-    );
-    scale=Math.min(3,Math.max(1,startScale*d/startDist));
-    modalImg.style.transform=`scale(${scale})`;
-  }
-});
-modalImg.addEventListener('touchend',e=>{
-  if(!e.changedTouches[0]) return;
-  const dx=e.changedTouches[0].clientX-startX;
-  if(dx>80) showPrev();
-  if(dx<-80) showNext();
-});
-
-/* GALERİ */
-function showNext(){
-  currentIndex=currentIndex%50+1;
-  updateModal();
-}
-function showPrev(){
-  currentIndex=currentIndex===1?50:currentIndex-1;
-  updateModal();
-}
-function updateModal(){
-  scale=1;
-  modalImg.style.transform='scale(1)';
-  modalImg.src=currentIndex+'.jpg';
-  document.getElementById('modalText').innerText=messages[currentIndex-1];
-}
 </script>
 
 </body>
 </html>
+
+
